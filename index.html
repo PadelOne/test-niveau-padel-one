@@ -214,9 +214,10 @@ const ORDER={q5:[2,0,3,1],q6:[1,3,0,2],q7:[3,1,2,0],q8:[1,0,3,2],q9:[2,3,0,1],q1
 const ord=q=>ORDER[q.id]||q.o.map((_,j)=>j);
 function step(i,d){let j=i+d;const t=Q.findIndex(q=>q.id==="t2");if(j===t&&st.a.t1===0){st.a.t2=0;j+=d}return j}
 let st={i:-1,a:{}};
+let busy=false;
 
 function compute(a){
-  const pts=id=>{const q=Q.find(x=>x.id===id);return q.o[a[id]][1]};
+  const pts=id=>{const q=Q.find(x=>x.id===id),v=a[id];return (v===undefined||!q.o[v])?0:q.o[v][1]};
   let s=0,sit=0;
   Q.forEach(q=>{if(q.s==="C")return;const p=pts(q.id);s+=p;if(q.s==="B")sit+=p});
   const B=[[0,5],[6,11],[12,18],[19,26],[27,34],[35,41],[42,48]];
@@ -268,9 +269,10 @@ function question(focus){
   <div class="row"><button class="btn ghost" id="back">← Retour</button>
   ${q.id==="q18"?'<span class="hint">Ensuite : tes tournois.</span>':""}</div>`;
   app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    if(busy)return;busy=true;
     st.a[q.id]=+b.dataset.j;
     app.querySelectorAll(".opt").forEach(x=>x.setAttribute("aria-pressed",x===b));
-    setTimeout(()=>{st.i=step(st.i,1);render(true)},220);
+    setTimeout(()=>{busy=false;st.i=step(st.i,1);render(true)},220);
   });
   document.getElementById("back").onclick=()=>{st.i=step(st.i,-1);render(true)};
   if(focus){const sel=app.querySelector('.opt[aria-pressed="true"]')||app.querySelector(".opt");sel&&sel.focus({preventScroll:true})}
@@ -346,6 +348,7 @@ function result(){
 
 function render(focus){
   try{
+  if(st.i>=Q.length){const m=Q.findIndex(q=>st.a[q.id]===undefined&&!(q.id==="t2"&&st.a.t1===0));if(m>=0)st.i=m;}
   if(!ENDPOINT&&st.i===Q.length)st.i=Q.length+1;
   if(st.i<0)intro();else if(st.i===Q.length)contact();else if(st.i>Q.length)result();else question(focus);
   }catch(e){
