@@ -164,6 +164,7 @@ function promo(g){
     <div class="links"><a href="https://padel-one.ch" target="_blank" rel="noopener">padel-one.ch</a><a href="https://www.instagram.com/padel_one.ch/" target="_blank" rel="noopener">Instagram @padel_one.ch</a><span>hello@padel-one.ch</span></div>
   </section>`;
 }
+function safePromo(g){try{return promo(g)}catch(e){console.error(e);return ""}}
 async function shareTest(b){
   const url=SHARE_URL||location.href.split("#")[0];
   const text="J'ai fait le test de niveau padel de Padel One. Et toi, tu es à combien ?";
@@ -330,9 +331,9 @@ function result(){
     <p>${grp.d}</p>
   </div>
   <div class="row"><button class="btn ghost" id="back">← Modifier mes réponses</button><button class="btn ghost" id="again">Recommencer</button></div>
-  ${promo(g)}`;
-  document.getElementById("sh").onclick=e=>shareTest(e.currentTarget);
-  document.getElementById("cc").onclick=async e=>{
+  ${safePromo(g)}`;
+  const sh=document.getElementById("sh");if(sh)sh.onclick=e=>shareTest(e.currentTarget);
+  const cc=document.getElementById("cc");if(cc)cc.onclick=async e=>{
     const b=e.currentTarget;
     try{await navigator.clipboard.writeText("NIVEAU15");b.textContent="Code copié"}
     catch(_){const r=document.createRange();r.selectNodeContents(document.getElementById("code"));const x=getSelection();x.removeAllRanges();x.addRange(r);b.textContent="Code sélectionné"}
@@ -342,9 +343,14 @@ function result(){
 }
 
 function render(focus){
+  try{
   if(!ENDPOINT&&st.i===Q.length)st.i=Q.length+1;
   if(st.i<0)intro();else if(st.i===Q.length)contact();else if(st.i>Q.length)result();else question(focus);
-  window.scrollTo({top:0});
+  }catch(e){
+    console.error(e);
+    app.innerHTML=head()+`<h2>Oups, l'affichage a échoué</h2><p class="lead">Recharge la page et recommence le test. Si le problème persiste, écris-nous à hello@padel-one.ch.</p><div><button class="btn" onclick="location.reload()">Recharger</button></div>`;
+  }
+  try{window.scrollTo(0,0)}catch(_){}
 }
 function start(data){if(data&&data.st)st=data.st;render()}
 window.claude?.hot?.snapshot?.(()=>({st}));
