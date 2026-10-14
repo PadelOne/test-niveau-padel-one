@@ -71,6 +71,37 @@ p{margin:0}
 .check{display:grid!important;grid-template-columns:22px 1fr;gap:10px;align-items:start;font-weight:400!important;color:var(--muted)}
 .check input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent)}
 .err{color:var(--warn);font-size:14px}
+.promo{display:grid;gap:22px;padding-top:8px;border-top:1px solid var(--line)}
+.promo h3{font-family:var(--display);font-stretch:78%;font-weight:800;font-size:clamp(28px,8vw,40px);line-height:1;text-transform:uppercase;margin:0;text-wrap:balance}
+.promo h3 em{font-style:normal;background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.offer{display:grid;grid-template-columns:1fr;gap:14px;padding:22px;border-radius:16px;background:var(--gold);color:var(--on-accent)}
+.offer .pct{font-family:var(--display);font-stretch:70%;font-weight:900;font-size:clamp(48px,14vw,64px);line-height:.9}
+.offer b{font-family:var(--display);font-weight:800;font-size:20px;font-stretch:90%}
+.offer p{font-size:15px}
+.offer .copy{grid-column:1/-1}
+.offer .head{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.offer code{background:#000;color:#f6d77a;border-color:#000;font:800 18px/1 var(--display);letter-spacing:.14em;text-align:center;padding:14px}
+.offer .btn{background:#000;color:#f6d77a}
+.next{border:1px solid var(--accent);border-radius:14px;padding:20px;display:grid;gap:10px;background:var(--accent-soft)}
+.next b{font-family:var(--display);font-size:20px;font-weight:800;font-stretch:90%}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.stats div{display:grid;gap:2px;min-width:0}
+.stats strong{font-family:var(--display);font-stretch:80%;font-weight:900;font-size:clamp(20px,5.6vw,30px);line-height:1;white-space:nowrap;background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-variant-numeric:tabular-nums}
+.stats span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.clubs{display:grid;gap:0;margin:0;padding:0;list-style:none}
+.clubs li{display:grid;grid-template-columns:1fr auto;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.clubs li:first-child{border-top:1px solid var(--line)}
+.clubs b{font-family:var(--display);font-weight:700;font-size:18px}
+.clubs small{display:block;color:var(--muted);font-size:14px}
+.clubs .tag{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:600;white-space:nowrap}
+.stores{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:400px){.stores{grid-template-columns:1fr}}
+.store{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border-radius:10px;padding:14px;font:600 15px/1 var(--body);border:1.5px solid var(--line);color:var(--ink);background:var(--surface)}
+.store:hover,.store:focus-visible{border-color:var(--accent)}
+.store svg{width:18px;height:18px;fill:currentColor;flex:none}
+.share{display:grid;gap:10px;text-align:center;padding:20px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.links{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;font-size:14px;color:var(--muted)}
+.links a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--accent)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -81,6 +112,53 @@ p{margin:0}
 // Collez ici l'URL de l'application web Google Apps Script (voir le guide).
 // Laissée vide, le test fonctionne mais n'enregistre rien.
 const ENDPOINT="";
+
+const SHARE_URL="";
+
+const APP_IOS="https://apps.apple.com/ch/app/padel-one-ch/id6760750645?l=fr-FR";
+const APP_ANDROID="https://play.google.com/store/apps/details?id=es.tpc.matchpoint.appclient.padelonech";
+function nextStep(g){
+  if(g<4)return{t:"Progresse avec un coach",d:"Nos cours en petits groupes de ton niveau t'apprennent les bons placements et l'usage des vitres, les deux clés pour passer au niveau supérieur."};
+  if(g<6)return{t:"Trouve des partenaires à ton niveau",d:"Réserve un terrain ou rejoins un match ouvert dans l'app Padel One : tu joues avec des joueurs de ton niveau, dans nos trois clubs."};
+  if(g<8)return{t:"Rejoins la communauté",d:"Ligues, tournois, soirées et matchs ouverts : nos clubs vivent toute l'année avec une super ambiance et des événements pour tous les niveaux, débutants compris."};
+  return{t:"Entraîne-toi dans nos clubs",d:"Terrains indoor dernière génération, ouverts tôt le matin et tard le soir, pour caler tes séances autour de ton calendrier de tournois."};
+}
+const ICON_APPLE='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.5 2-3.7 2.1-3.8-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.1 2.5-1.8 3.1-.5 7.6 1.3 10.1.8 1.2 1.8 2.6 3.1 2.5 1.3-.1 1.7-.8 3.3-.8 1.5 0 1.9.8 3.3.8 1.4 0 2.2-1.2 3-2.4 1-1.4 1.4-2.7 1.4-2.8-.1 0-2.7-1-2.7-4.1zM13.9 5.2c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg>';
+const ICON_PLAY='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2.5v19c0 .4.4.6.7.4l16-9.5c.3-.2.3-.6 0-.8l-16-9.5C4.4 1.9 4 2.1 4 2.5z"/></svg>';
+function promo(g){
+  const n=nextStep(g);
+  return `<section class="promo" aria-labelledby="pt">
+    <h3 id="pt">Viens jouer chez <em>Padel One</em></h3>
+    <div class="offer">
+      <div class="head"><div class="pct">−15%</div><b>sur ton prochain<br>cours privé</b></div>
+      <p>Dans n'importe quel club Padel One, avec un de nos coachs. Mentionne ce code en réservant.</p>
+      <div class="copy"><code id="code">NIVEAU15</code><button class="btn" id="cc">Copier le code</button></div>
+    </div>
+    <div class="next"><b>${n.t}</b><p>${n.d}</p></div>
+    <div class="stats"><div><strong>10'000+</strong><span>joueurs</span></div><div><strong>3</strong><span>clubs indoor</span></div><div><strong>5h30–24h</strong><span>dans tous nos clubs</span></div></div>
+    <ul class="clubs">
+      <li><div><b>Échandens</b><small>Près de Lausanne · 5 terrains indoor · bar</small></div></li>
+      <li><div><b>Payerne</b><small>2 terrains indoor panoramiques · lounge avec vue</small></div></li>
+      <li><div><b>Saint-Maurice</b><small>2 terrains indoor</small></div></li>
+    </ul>
+    <div style="display:grid;gap:10px"><div class="eyebrow">Réserve ton terrain dans l'app Padel One</div>
+    <div class="stores">
+      <a class="store" href="${APP_IOS}" target="_blank" rel="noopener">${ICON_APPLE}App Store</a>
+      <a class="store" href="${APP_ANDROID}" target="_blank" rel="noopener">${ICON_PLAY}Google Play</a>
+    </div></div>
+    <div class="share"><b style="font-family:var(--display);font-size:20px">Tes partenaires ont-ils vraiment ton niveau ?</b>
+      <p class="hint">Envoie-leur le test et comparez vos résultats.</p>
+      <div><button class="btn" id="sh">Partager le test</button></div></div>
+    <div class="links"><a href="https://padel-one.ch" target="_blank" rel="noopener">padel-one.ch</a><a href="https://www.instagram.com/padel_one.ch/" target="_blank" rel="noopener">Instagram @padel_one.ch</a><span>hello@padel-one.ch</span></div>
+  </section>`;
+}
+async function shareTest(b){
+  const url=SHARE_URL||location.href.split("#")[0];
+  const text="J'ai fait le test de niveau padel de Padel One. Et toi, tu es à combien ?";
+  try{if(navigator.share){await navigator.share({title:"Test de niveau Padel One",text,url});return}}catch(e){if(e&&e.name==="AbortError")return}
+  try{await navigator.clipboard.writeText(text+" "+url);b.textContent="Lien copié"}
+  catch(_){b.textContent=url}
+}
 
 const SECTIONS={A:"Expérience",B:"Situations de jeu",C:"Tournois"};
 const Q=[
@@ -115,6 +193,10 @@ const G={
  10:{n:"Élite",d:"Tu es joueur professionnel."}
 };
 const KEYS="ABCDEFGHI";
+// Ordre d'affichage fixe et mélangé : la meilleure réponse n'est jamais systématiquement en dernier.
+// Les échelles factuelles (durées, fréquences, classements, catégories) restent dans l'ordre naturel.
+const ORDER={q5:[2,0,3,1],q6:[1,3,0,2],q7:[3,1,2,0],q8:[1,0,3,2],q9:[2,3,0,1],q13:[1,3,0,2],q14:[3,0,2,1],q15:[2,1,3,0],q16:[1,3,2,0],q17:[0,3,1,2],q18:[3,1,0,2],t2:[1,0,3,2]};
+const ord=q=>ORDER[q.id]||q.o.map((_,j)=>j);
 function step(i,d){let j=i+d;const t=Q.findIndex(q=>q.id==="t2");if(j===t&&st.a.t1===0){st.a.t2=0;j+=d}return j}
 let st={i:-1,a:{}};
 
@@ -166,7 +248,7 @@ function question(focus){
   <div class="bar"><i style="width:${(st.i)/n*100}%"></i></div></div>
   <h2 id="qt">${q.t}</h2>
   <div class="opts" role="group" aria-labelledby="qt">
-   ${q.o.map((o,j)=>`<button class="opt" id="${q.id}-${j}" data-j="${j}" aria-pressed="${st.a[q.id]===j}"><span class="k">${KEYS[j]}</span><span>${o[0]}</span></button>`).join("")}
+   ${ord(q).map((j,p)=>`<button class="opt" id="${q.id}-${j}" data-j="${j}" aria-pressed="${st.a[q.id]===j}"><span class="k">${KEYS[p]}</span><span>${q.o[j][0]}</span></button>`).join("")}
   </div>
   <div class="row"><button class="btn ghost" id="back">← Retour</button>
   ${q.id==="q18"?'<span class="hint">Ensuite : tes tournois.</span>':""}</div>`;
@@ -234,16 +316,14 @@ function result(){
     </div>
     <div class="scale">${[1,2,3,4,5,6,7,8,9,10].map(k=>{const f=Math.max(0,Math.min(1,g-k+1));return `<div class="${f>0?"on":""}" style="--f:${f}">${k}</div>`}).join("")}</div>
     <p>${grp.d}</p>
-    ${flag?`<div class="note warn">Certaines réponses demandent une vérification. Un coach confirmera ton niveau avant de valider ton inscription.</div>`:`<div class="note">Ce niveau est confirmé par un coach lors de ton premier cours. Tu peux changer de cours sans frais pendant cette première séance.</div>`}
-    <div style="display:grid;gap:8px"><div class="eyebrow">À coller dans ton inscription</div>
-    <div class="copy"><code id="line">${line}</code><button class="btn" id="cp">Copier</button></div></div>
   </div>
-  <p class="hint">Tournois : l'organisation peut reclasser une équipe dont le niveau ne correspond pas à la catégorie. En cas d'écart manifeste, l'inscription n'est pas remboursée.</p>
-  <div class="row"><button class="btn ghost" id="back">← Modifier mes réponses</button><button class="btn ghost" id="again">Recommencer</button></div>`;
-  document.getElementById("cp").onclick=async e=>{
+  <div class="row"><button class="btn ghost" id="back">← Modifier mes réponses</button><button class="btn ghost" id="again">Recommencer</button></div>
+  ${promo(g)}`;
+  document.getElementById("sh").onclick=e=>shareTest(e.currentTarget);
+  document.getElementById("cc").onclick=async e=>{
     const b=e.currentTarget;
-    try{await navigator.clipboard.writeText(line);b.textContent="Copié"}
-    catch(_){const r=document.createRange();r.selectNodeContents(document.getElementById("line"));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="Sélectionné"}
+    try{await navigator.clipboard.writeText("NIVEAU15");b.textContent="Code copié"}
+    catch(_){const r=document.createRange();r.selectNodeContents(document.getElementById("code"));const x=getSelection();x.removeAllRanges();x.addRange(r);b.textContent="Code sélectionné"}
   };
   document.getElementById("back").onclick=()=>{st.i=step(Q.length,-1);render(true)};
   document.getElementById("again").onclick=()=>{st={i:-1,a:{},c:st.c};render()};
