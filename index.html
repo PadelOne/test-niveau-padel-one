@@ -81,7 +81,8 @@ p{margin:0}
 .offer .copy{grid-column:1/-1}
 .offer .head{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .offer code{background:#000;color:#f6d77a;border-color:#000;font:800 18px/1 var(--display);letter-spacing:.14em;text-align:center;padding:14px}
-.offer .btn{background:#000;color:#f6d77a}
+.offer .btn{background:#000;color:#f6d77a;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.offer .fine{font-size:12px;opacity:.75}
 .wa{display:grid;grid-template-columns:40px 1fr auto;gap:14px;align-items:center;text-decoration:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--accent);border-radius:14px;padding:16px 18px}
 .wa:hover,.wa:focus-visible{background:var(--accent-soft)}
 .wa svg{width:40px;height:40px;fill:var(--accent)}
@@ -137,9 +138,10 @@ function promo(g){
   return `<section class="promo" aria-labelledby="pt">
     <h3 id="pt">Viens jouer chez <em>Padel One</em></h3>
     <div class="offer">
-      <div class="head"><div class="pct">−15%</div><b>sur ton prochain<br>cours privé</b></div>
-      <p>Dans n'importe quel club Padel One, avec un de nos coachs. Mentionne ce code en réservant.</p>
-      <div class="copy"><code id="code">NIVEAU15</code><button class="btn" id="cc">Copier le code</button></div>
+      <div class="head"><div class="pct">−10%</div><b>sur ton prochain<br>cours privé</b></div>
+      <p>Dans n'importe quel club Padel One, avec un de nos coachs. Mentionne ce code dans les commentaires de ta demande de cours.</p>
+      <div class="copy"><code id="code">NIVEAU10</code><a class="btn" href="https://forms.gle/zub1dTxvEDsCSkZn9" target="_blank" rel="noopener">Réserver une leçon</a></div>
+      <small class="fine">Promotion valable une seule fois par personne, pour une leçon avant 17h.</small>
     </div>
     <div class="next"><b>${n.t}</b><p>${n.d}</p></div>
     <a class="wa" href="https://chat.whatsapp.com/Fz2VzmM7hNqGVWwR8p6pRS" target="_blank" rel="noopener">
@@ -147,9 +149,9 @@ function promo(g){
       <span><b>Rejoins la communauté WhatsApp</b><small>Matchs, événements et bons plans Padel One</small></span>
       <i aria-hidden="true">→</i>
     </a>
-    <div class="stats"><div><strong>10'000+</strong><span>joueurs</span></div><div><strong>3</strong><span>clubs indoor</span></div><div><strong>5h30–24h</strong><span>dans tous nos clubs</span></div></div>
+    <div class="stats"><div><strong>5'000+</strong><span>joueurs</span></div><div><strong>3</strong><span>clubs indoor</span></div><div><strong>5h30–24h</strong><span>dans tous nos clubs</span></div></div>
     <ul class="clubs">
-      <li><div><b>Échandens</b><small>Près de Lausanne · 5 terrains indoor · bar</small></div></li>
+      <li><div><b>Échandens</b><small>Près de Lausanne · 4 terrains indoor · 1 terrain de simple · bar</small></div></li>
       <li><div><b>Payerne</b><small>2 terrains indoor full panoramiques · lounge avec vue · parking gratuit</small></div></li>
       <li><div><b>Saint-Maurice</b><small>2 terrains indoor full panoramiques · zone détente · parking gratuit</small></div></li>
     </ul>
@@ -335,7 +337,7 @@ function result(){
   const sh=document.getElementById("sh");if(sh)sh.onclick=e=>shareTest(e.currentTarget);
   const cc=document.getElementById("cc");if(cc)cc.onclick=async e=>{
     const b=e.currentTarget;
-    try{await navigator.clipboard.writeText("NIVEAU15");b.textContent="Code copié"}
+    try{await navigator.clipboard.writeText("NIVEAU10");b.textContent="Code copié"}
     catch(_){const r=document.createRange();r.selectNodeContents(document.getElementById("code"));const x=getSelection();x.removeAllRanges();x.addRange(r);b.textContent="Code sélectionné"}
   };
   document.getElementById("back").onclick=()=>{st.i=step(Q.length,-1);render(true)};
